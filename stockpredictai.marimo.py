@@ -278,19 +278,17 @@ def _(torch, Tuple):
             hidden_size: int = 128,
             num_layers: int = 2,
             dropout: float = 0.2,
-            output_size: int = 12,  # Changed to match input_size
             sequence_length: int = 60
         ):
             """
-            LSTM-based Generator model
+            LSTM-based Generator model for trading actions
             
             Args:
                 input_size: Number of input features
                 hidden_size: Number of hidden units in LSTM
                 num_layers: Number of LSTM layers
                 dropout: Dropout rate
-                output_size: Number of output features (should match input_size)
-                sequence_length: Length of sequences to generate
+                sequence_length: Length of input sequences
             """
             super(LSTMModel, self).__init__()
             self.hidden_size = hidden_size
@@ -309,7 +307,8 @@ def _(torch, Tuple):
                 torch.nn.Linear(hidden_size, hidden_size // 2),
                 torch.nn.ReLU(),
                 torch.nn.Dropout(dropout),
-                torch.nn.Linear(hidden_size // 2, output_size * sequence_length)
+                torch.nn.Linear(hidden_size // 2, 1),  # Output single action value
+                torch.nn.Tanh()  # Bound action between -1 and 1
             )
             
         def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -320,30 +319,33 @@ def _(torch, Tuple):
                 x: Input tensor of shape (batch_size, sequence_length, input_size)
                 
             Returns:
-                Output tensor of shape (batch_size, sequence_length, input_size)
+                Output tensor of shape (batch_size, 1) representing trading action
             """
-            # Debug prints for first batch
-            if x.size(0) == 32:  # First batch
-                print("\n=== Debug: LSTM Generator ===")
-                print(f"Input shape: {x.shape}")
+            # Debug prints for input
+            print("\n=== Debug: LSTM Generator Forward Pass ===")
+            print(f"Input shape: {x.shape}")
+            print(f"Input type: {x.dtype}")
+            print(f"Input device: {x.device}")
+            
+            # Ensure input has correct shape
+            if len(x.shape) == 2:
+                print("Warning: Input is 2D, reshaping to 3D")
+                x = x.unsqueeze(0)  # Add batch dimension if missing
             
             # Process through LSTM
             lstm_out, _ = self.lstm(x)
-            if x.size(0) == 32:  # First batch
-                print(f"LSTM output shape: {lstm_out.shape}")
+            print(f"LSTM output shape: {lstm_out.shape}")
             
-            # Generate sequence
-            out = self.fc(lstm_out[:, -1, :])
-            if x.size(0) == 32:  # First batch
-                print(f"FC output shape: {out.shape}")
+            # Use only the last output for action prediction
+            last_hidden = lstm_out[:, -1, :]
+            print(f"Last hidden shape: {last_hidden.shape}")
             
-            # Reshape to (batch_size, sequence_length, input_size)
-            out = out.view(x.size(0), self.sequence_length, -1)
-            if x.size(0) == 32:  # First batch
-                print(f"Final output shape: {out.shape}")
-                print(f"Output range: [{out.min().item():.4f}, {out.max().item():.4f}]")
+            # Generate action
+            action = self.fc(last_hidden)
+            print(f"Action shape: {action.shape}")
+            print(f"Action range: [{action.min().item():.4f}, {action.max().item():.4f}]")
             
-            return out
+            return action
     
     return LSTMModel
 
@@ -797,13 +799,35 @@ def _(torch, Tuple):
             self.rewards = []
             self.values = []
             self.log_probs = []
+            
+            # Move models to device
+            self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            self.generator = self.generator.to(self.device)
+            self.discriminator = self.discriminator.to(self.device)
         
         def select_action(self, state: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
             """Select action using current policy"""
+            print("\n=== Debug: PPOTrainer select_action ===")
+            print(f"State shape: {state.shape}")
+            print(f"State type: {state.dtype}")
+            print(f"State device: {state.device}")
+            
+            # Move state to device if needed
+            state = state.to(self.device)
+            
             with torch.no_grad():
+                # Ensure state has correct shape
+                if len(state.shape) == 2:
+                    print("Warning: State is 2D, reshaping to 3D")
+                    state = state.unsqueeze(0)  # Add batch dimension if missing
+                
                 action = self.generator(state)
                 value = self.discriminator(state)
                 log_prob = torch.distributions.Normal(action, 1.0).log_prob(action)
+                
+                print(f"Action shape: {action.shape}")
+                print(f"Value shape: {value.shape}")
+                print(f"Log prob shape: {log_prob.shape}")
                 
             return action, value, log_prob
         
