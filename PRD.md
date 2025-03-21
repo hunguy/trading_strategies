@@ -8,66 +8,66 @@ Reimplement the stock prediction system using modern PyTorch libraries, followin
 
 ### 2.1 Data Pipeline
 
--   **Data Collection & Preprocessing**
-    -   Implement data fetching from Yahoo Finance using `vectorbt`
-    -   Create data preprocessing pipeline for OHLCV data
-    -   Implement feature engineering (technical indicators)
-    -   Create train/validation/test split functionality
-    -   Implement data normalization/scaling
+- **Data Collection & Preprocessing**
+  - Implement data fetching from Yahoo Finance using `vectorbt`
+  - Create data preprocessing pipeline for OHLCV data
+  - Implement feature engineering (technical indicators)
+  - Create train/validation/test split functionality
+  - Implement data normalization/scaling
 
 ### 2.2 Model Architecture
 
--   **Generator (LSTM-based)**
+- **Generator (LSTM-based)**
 
-    -   Implement LSTM generator using PyTorch
-    -   Configure sequence length and hidden dimensions
-    -   Implement attention mechanism
-    -   Add dropout and regularization
+  - Implement LSTM generator using PyTorch
+  - Configure sequence length and hidden dimensions
+  - Implement attention mechanism
+  - Add dropout and regularization
 
--   **Discriminator (CNN-based)**
-    -   Implement CNN discriminator using PyTorch
-    -   Configure convolutional layers
-    -   Implement batch normalization
-    -   Add LeakyReLU activations
+- **Discriminator (CNN-based)**
+  - Implement CNN discriminator using PyTorch
+  - Configure convolutional layers
+  - Implement batch normalization
+  - Add LeakyReLU activations
 
 ### 2.3 Training Pipeline
 
--   **GAN Training**
+- **GAN Training**
 
-    -   Implement GAN training loop
-    -   Add Wasserstein loss
-    -   Implement gradient clipping
-    -   Add learning rate scheduling
-    -   Implement early stopping
+  - Implement GAN training loop
+  - Add Wasserstein loss
+  - Implement gradient clipping
+  - Add learning rate scheduling
+  - Implement early stopping
 
--   **Reinforcement Learning**
-    -   Implement PPO algorithm
-    -   Create custom reward function
-    -   Implement experience replay buffer
-    -   Add policy and value networks
+- **Reinforcement Learning**
+  - Implement PPO algorithm
+  - Create custom reward function
+  - Implement experience replay buffer
+  - Add policy and value networks
 
 ### 2.4 Optimization & Hyperparameter Tuning
 
--   **Bayesian Optimization**
-    -   Implement hyperparameter optimization
-    -   Configure search space
-    -   Implement cross-validation
-    -   Add model checkpointing
+- **Bayesian Optimization**
+  - Implement hyperparameter optimization
+  - Configure search space
+  - Implement cross-validation
+  - Add model checkpointing
 
 ### 2.5 Evaluation & Visualization
 
--   **Performance Metrics**
+- **Performance Metrics**
 
-    -   Implement accuracy metrics
-    -   Add Sharpe ratio calculation
-    -   Implement drawdown analysis
-    -   Add risk-adjusted returns
+  - Implement accuracy metrics
+  - Add Sharpe ratio calculation
+  - Implement drawdown analysis
+  - Add risk-adjusted returns
 
--   **Visualization**
-    -   Create price prediction plots
-    -   Add technical indicator overlays
-    -   Implement performance dashboard
-    -   Add confusion matrix for trade signals
+- **Visualization**
+  - Create price prediction plots
+  - Add technical indicator overlays
+  - Implement performance dashboard
+  - Add confusion matrix for trade signals
 
 ## 3. Implementation Phases
 
@@ -110,52 +110,52 @@ Reimplement the stock prediction system using modern PyTorch libraries, followin
 
 ### 4.1 Libraries
 
--   PyTorch
--   vectorbt
--   pandas
--   numpy
--   scikit-learn
--   matplotlib
--   seaborn
--   optuna (for Bayesian optimization)
+- PyTorch
+- vectorbt
+- pandas
+- numpy
+- scikit-learn
+- matplotlib
+- seaborn
+- optuna (for Bayesian optimization)
 
 ### 4.2 Code Organization
 
--   Each component in separate Marimo cells
--   Modular function design
--   Clear documentation
--   Type hints
--   Error handling
+- Each component in separate notebook cells
+- Modular function design
+- Clear documentation
+- Type hints
+- Error handling
 
 ### 4.3 Performance Requirements
 
--   Efficient data processing
--   GPU acceleration support
--   Memory optimization
--   Fast training loops
+- Efficient data processing
+- GPU acceleration support
+- Memory optimization
+- Fast training loops
 
 ## 5. Success Metrics
 
--   Prediction accuracy > 60%
--   Sharpe ratio > 1.5
--   Maximum drawdown < 20%
--   Training time < 4 hours
--   Memory usage < 16GB
+- Prediction accuracy > 60%
+- Sharpe ratio > 1.5
+- Maximum drawdown < 20%
+- Training time < 4 hours
+- Memory usage < 16GB
 
 ## 6. Risk Mitigation
 
--   Data quality checks
--   Model validation
--   Overfitting prevention
--   Regular backups
--   Error logging
+- Data quality checks
+- Model validation
+- Overfitting prevention
+- Regular backups
+- Error logging
 
 ## 7. Timeline
 
--   Phase 1: 1 week
--   Phase 2: 2 weeks
--   Phase 3: 2 weeks
--   Phase 4: 1 week
--   Phase 5: 1 week
+- Phase 1: 1 week
+- Phase 2: 2 weeks
+- Phase 3: 2 weeks
+- Phase 4: 1 week
+- Phase 5: 1 week
 
 Total estimated time: 7 weeks
